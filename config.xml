@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<config>
+    <entry key="title">Memes</entry>
+    <entry key="description">Add memes</entry>
+    <entry key="types" private="true">sidebar</entry>
+    <entry key="initial_height" private="true">350</entry>
+    <entry key="icon" private="true">noun_clipboard.svg</entry>
+    <entry key="thumbnail" private="true">noun_clipboard.svg</entry>
+</config>

@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>To Do List</title>
+  <link rel="stylesheet" href="../lib/bootstrap.min.css">
+  <script type="text/javascript" src="../lib/jquery-2.1.3.min.js"></script>
+  <script type="text/javascript" src="../lib/gadgetlib.js"></script>
+
+  <link rel="stylesheet" href="../lib/bootstrap.min.css">
+  <style>
+    html {
+      box-sizing: border-box;
+    }
+
+    *, *:before, *:after {
+      box-sizing: inherit;
+    }
+
+    body {
+      overflow-y: hidden;
+      background-color: inherit;
+    }
+
+    header {
+      width: 100%;
+      height: 30px;
+      padding: 5px 5px 0px 5px;
+    }
+
+    input[type="checkbox"]:checked + span {
+      text-decoration: line-through;
+      color: #767676;
+    }
+  </style>
+</head>
+<body>
+<header>
+  <label>Image: </label><br>
+
+  <!--Hardcoding Template inputs for now-->
+  <div class="radio">
+    <label>
+      <input type="radio" name="imgFlipTemplate" value="61579" checked>One does not
+    </label>
+  </div>
+
+  <div class="radio">
+    <label>
+      <input type="radio" name="imgFlipTemplate" value="101470">Aliens
+    </label>
+  </div>
+
+  <div class="radio">
+    <label>
+      <input type="radio" name="imgFlipTemplate" value="405658">Grumpy Cat
+    </label>
+  </div>
+
+  <div class="radio">
+    <label>
+      <input type="radio" name="imgFlipTemplate" value="61520">Not sure if
+    </label>
+  </div>
+  <hr>
+  <input type="text" id="top-text" name="top-text" placeholder="Top">
+  <input type="text" id="bottom-text" name="bottom-text" placeholder="Bottom"><br/>
+  <button id="add-meme" class="btn btn-success">+ Add</button>
+</header>
+<div style="display:none;">
+  <!-- ouc:ob --><!-- /ouc:ob -->
+</div>
+<script type="text/javascript">
+  var MIME_TYPE = 'ou-gadget-metadata-todo/json';
+  $(document).ready(function () {
+
+    //todo: generate meme template inputs based on memes array
+    var memes = [
+      {
+        name: 'One does not',
+        template: '61579'
+      },
+      {
+        name: 'Aliens',
+        template: '101470'
+      },
+      {
+        name: 'Grumpy Cat',
+        template: '405658'
+      },
+      {
+        name: 'Not sure if',
+        template: '61520 '
+      },
+      {
+        name: 'That would be great',
+        template: '563423 '
+      }
+    ];
+
+    function formatTemplateInput(meme) {
+      $('.imgFlipTemplateRadio').append(
+        '<label class="custom-control custom-radio">' +
+        '<input id="radio1" name="imgFlipTemplate" type="radio" value="' + meme.template + '" class="custom-control-input">' +
+        '<span class="custom-control-indicator"></span>' +
+        '<span class="custom-control-description">' + meme.name + '</span>' +
+        '</label><br>'
+      );
+    }
+
+    //memes.map(formatTemplateInput)
+
+    $('#add-meme').on('click', function (evt) {
+      //var template = $('#template').val();
+      var template = $('input[name="imgFlipTemplate"]:checked').val();
+      var topText = $('#top-text').val();
+      var bottomText = $('#bottom-text').val();
+
+      $.ajax({
+        url: 'https://api.imgflip.com/caption_image',
+        type: 'POST',
+        data: {
+          "text0": topText,
+          "text1": bottomText,
+          "template_id": template,
+          "username": "your_username",
+          "password": "your_password"
+        },
+        dataType: "json",
+        //success: function(meme) { console.log(meme.data.url) }
+      })
+        .done(function (meme) {
+          var url = meme.data.url
+          var img = '<img src="' + url + '" />'
+          gadget.oucInsertAtCursor(img);
+        });
+    });
+  });
+
+
+</script>
+</body>
+</html>
